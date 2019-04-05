@@ -1,0 +1,26 @@
+trigger:
+  branches:
+    include: ["master", "v*"]
+  paths:
+    exclude: ["*.md"]
+
+variables:
+  TreatWarningsAsErrors: true
+  BuildConfiguration: Release
+  BuildPlatform: Any CPU
+
+jobs:
+- job: Windows
+  pool: Hosted Windows 2019 with VS2019
+  steps:
+  - template: azure-pipelines/windows-build.yml
+
+- job: MacOS
+  pool: Hosted macOS
+  steps:
+  - template: azure-pipelines/unix-build.yml
+
+- job: Linux
+  pool: Hosted Ubuntu 1604
+  steps:
+  - template: azure-pipelines/unix-build.yml

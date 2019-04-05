@@ -1,0 +1,31 @@
+steps:
+- script: dotnet --info
+  displayName: Show .NET Core SDK info
+
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: src/**/*.sln
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: pack
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    projects: src/**/*.sln
+    arguments: /p:CollectCoverage=true /p:CoverletOutput=$(Build.ArtifactStagingDirectory)/coverage.xml /p:CoverletOutputFormat=cobertura
+
+- powershell: |
+    (New-Object System.Net.WebClient).DownloadFile("https://github.com/codecov/codecov-exe/releases/download/1.2.0/Codecov.zip", (Join-Path $pwd "Codecov.zip")) # Download Codecov.zip from github release.
+    Expand-Archive .\Codecov.zip -DestinationPath Codecov # UnZip the file.
+    .\Codecov\codecov.exe -f $(Build.ArtifactStagingDirectory)/coverage.xml
+  env:
+    CODECOV_TOKEN: $(CODECOV_TOKEN_SECRET)
+  displayName: Publish to codecov.io
+
+- task: PublishBuildArtifacts@1
