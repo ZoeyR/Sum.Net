@@ -1,0 +1,22 @@
+steps:
+- script: dotnet --info
+  displayName: Show .NET Core SDK info
+
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: src/**/*.sln
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: pack
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    projects: src/**/*.sln
+
+- task: PublishBuildArtifacts@1
