@@ -6,6 +6,7 @@
 namespace Sum.Net
 {
     using System;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Struct that may contain an <typeparamref name="A"/>.
@@ -16,6 +17,7 @@ namespace Sum.Net
     /// For example an instance of <see cref="SumType{Int32}"/> may not contain an int if it was upcast from a <see cref="SumType{Int32, String}"/>
     /// that contained a string instance.
     /// </remarks>
+    [JsonConverter(typeof(SumConverter))]
     public struct SumType<A> : ISumType
     {
         internal int Index;
@@ -58,6 +60,7 @@ namespace Sum.Net
     /// </summary>
     /// <typeparam name="A">The first type this struct is designed to contain.</typeparam>
     /// <typeparam name="B">The second type this struct is designed to contain.</typeparam>
+    [JsonConverter(typeof(SumConverter))]
     public struct SumType<A, B> : ISumType
     {
         internal int Index;
@@ -127,6 +130,7 @@ namespace Sum.Net
     /// <typeparam name="A">The first type this struct is designed to contain.</typeparam>
     /// <typeparam name="B">The second type this struct is designed to contain.</typeparam>
     /// <typeparam name="C">The third type this struct is designed to contain.</typeparam>
+    [JsonConverter(typeof(SumConverter))]
     public struct SumType<A, B, C> : ISumType
     {
         internal int Index;
@@ -223,6 +227,7 @@ namespace Sum.Net
     /// <typeparam name="B">The second type this struct is designed to contain.</typeparam>
     /// <typeparam name="C">The third type this struct is designed to contain.</typeparam>
     /// <typeparam name="D">The fourth type this struct is designed to contain.</typeparam>
+    [JsonConverter(typeof(SumConverter))]
     public struct SumType<A, B, C, D> : ISumType
     {
         internal int Index;
