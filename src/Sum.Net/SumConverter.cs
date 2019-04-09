@@ -12,6 +12,8 @@ namespace Sum.Net
 
     internal class SumConverter : JsonConverter
     {
+        private StrictPrimitiveConverter innerConverter = new StrictPrimitiveConverter();
+
         public override bool CanConvert(Type objectType)
         {
             return true;
@@ -21,11 +23,13 @@ namespace Sum.Net
         {
             var token = JToken.ReadFrom(reader);
 
+            serializer.Converters.Add(this.innerConverter);
+
             foreach (var (index, value) in objectType.GenericTypeArguments.Select((value, index) => (index, value)))
             {
                 try
                 {
-                    var sumValue = token.ToObject(value);
+                    var sumValue = token.ToObject(value, serializer);
                     object[] args = { index, sumValue };
                     return objectType.Assembly.CreateInstance(objectType.FullName, false, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic, null, args, null, null);
                 }
@@ -34,6 +38,8 @@ namespace Sum.Net
                     continue;
                 }
             }
+
+            serializer.Converters.Remove(this.innerConverter);
 
             object[] defaultArgs = { -1, null };
             return objectType.Assembly.CreateInstance(objectType.FullName, false, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic, null, defaultArgs, null, null);
