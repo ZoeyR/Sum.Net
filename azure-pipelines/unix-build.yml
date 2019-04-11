@@ -11,12 +11,12 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
-    command: pack
+    command: build
+    projects: src/**/*.sln
 
 - task: DotNetCoreCLI@2
   displayName: Test
   inputs:
     command: test
     projects: src/**/*.sln
-
-- task: PublishBuildArtifacts@1
+    arguments: --no-build
