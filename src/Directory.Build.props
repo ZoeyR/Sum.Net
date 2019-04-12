@@ -6,7 +6,7 @@
     <PackageOutputPath>$(RepoBinPath)$(Configuration)/Packages/</PackageOutputPath>
     
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>CS1591</NoWarn>
+    <NoWarn>CS1591;CS1701</NoWarn>
     <LangVersion>latest</LangVersion>
 
     <PackageTags>Sum Union</PackageTags>
