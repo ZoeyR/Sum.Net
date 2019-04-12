@@ -7,6 +7,7 @@ namespace Sum.Net
 {
     using System;
     using System.Linq;
+    using System.Reflection;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
@@ -25,13 +26,15 @@ namespace Sum.Net
 
             serializer.Converters.Add(this.innerConverter);
 
-            foreach (var (index, value) in objectType.GenericTypeArguments.Select((value, index) => (index, value)))
+            var constructor = objectType.GetTypeInfo().DeclaredConstructors.First();
+            foreach (var (index, value) in objectType.GenericTypeArguments.Select((Type value, int index) => (index, value)))
             {
                 try
                 {
                     var sumValue = token.ToObject(value, serializer);
                     object[] args = { index, sumValue };
-                    return objectType.Assembly.CreateInstance(objectType.FullName, false, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic, null, args, null, null);
+                    var sum = constructor.Invoke(args);
+                    return sum;
                 }
                 catch
                 {
@@ -42,14 +45,16 @@ namespace Sum.Net
             serializer.Converters.Remove(this.innerConverter);
 
             object[] defaultArgs = { -1, null };
-            return objectType.Assembly.CreateInstance(objectType.FullName, false, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic, null, defaultArgs, null, null);
+            var something = constructor.Invoke(defaultArgs);
+            return something;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             writer = writer ?? throw new ArgumentNullException(nameof(writer));
 
-            var sumValue = value.GetType().GetField("Value", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(value);
+            var valueField = value.GetType().GetTypeInfo().GetDeclaredField("Value");
+            var sumValue = valueField.GetValue(value);
             JToken token = JToken.FromObject(sumValue);
             token.WriteTo(writer);
         }

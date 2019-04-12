@@ -13,10 +13,25 @@ steps:
   inputs:
     command: build
     projects: src/**/*.sln
+    arguments: -f netcoreapp1.0
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: build
+    projects: src/**/*.sln
+    arguments: -f netcoreapp2.0
 
 - task: DotNetCoreCLI@2
   displayName: Test
   inputs:
     command: test
     projects: src/**/*.sln
-    arguments: --no-build
+    arguments: --no-build -f netcoreapp1.0
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    projects: src/**/*.sln
+    arguments: --no-build -f netcoreapp2.0
