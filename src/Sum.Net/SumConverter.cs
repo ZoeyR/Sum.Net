@@ -22,16 +22,22 @@ namespace Sum.Net
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var token = JToken.ReadFrom(reader);
-
-            serializer.Converters.Add(this.innerConverter);
-
             var constructor = objectType.GetTypeInfo().DeclaredConstructors.First();
             foreach (var (index, value) in objectType.GenericTypeArguments.Select((Type value, int index) => (index, value)))
             {
                 try
                 {
-                    var sumValue = token.ToObject(value, serializer);
+                    object sumValue = null;
+                    if (this.innerConverter.CanConvert(value))
+                    {
+                        sumValue = this.innerConverter.ReadJson(reader, value, null, serializer);
+                    }
+                    else
+                    {
+                        var token = JToken.ReadFrom(reader);
+                        sumValue = token.ToObject(value, serializer);
+                    }
+
                     object[] args = { index, sumValue };
                     var sum = constructor.Invoke(args);
                     return sum;
@@ -41,8 +47,6 @@ namespace Sum.Net
                     continue;
                 }
             }
-
-            serializer.Converters.Remove(this.innerConverter);
 
             object[] defaultArgs = { -1, null };
             var something = constructor.Invoke(defaultArgs);
