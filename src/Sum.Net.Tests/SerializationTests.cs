@@ -39,8 +39,12 @@ namespace Sum.Net.Tests
         {
             var sum = JsonConvert.DeserializeObject<SumType<int, bool, double, string>>("4.5");
 
-            Assert.True(sum.TryGet<double>(out var doubleValue));
-            Assert.Equal(4.5, doubleValue);
+            Assert.True(sum.Value is double);
+
+            if (sum.Value is double doubleValue)
+            {
+                Assert.Equal(4.5, doubleValue);
+            }
         }
 
         [Fact]
@@ -48,8 +52,12 @@ namespace Sum.Net.Tests
         {
             var sum = JsonConvert.DeserializeObject<SumType<int, bool, double, string>>("true");
 
-            Assert.True(sum.TryGet<bool>(out var boolValue));
-            Assert.True(boolValue);
+            Assert.True(sum.Value is bool);
+
+            if (sum.Value is bool boolValue)
+            {
+                Assert.True(boolValue);
+            }
         }
 
         [Fact]
@@ -57,8 +65,12 @@ namespace Sum.Net.Tests
         {
             var sum = JsonConvert.DeserializeObject<SumType<int, bool, double, string>>("42");
 
-            Assert.True(sum.TryGet<int>(out var intValue));
-            Assert.Equal(42, intValue);
+            Assert.True(sum.Value is int);
+
+            if (sum.Value is int intValue)
+            {
+                Assert.Equal(42, intValue);
+            }
         }
 
         [Fact]
@@ -66,8 +78,12 @@ namespace Sum.Net.Tests
         {
             var sum = JsonConvert.DeserializeObject<SumType<int, bool, double, string>>("\"true\"");
 
-            Assert.True(sum.TryGet<string>(out var stringValue));
-            Assert.Equal("true", stringValue);
+            Assert.True(sum.Value is string);
+
+            if (sum.Value is string stringValue)
+            {
+                Assert.Equal("true", stringValue);
+            }
         }
 
         [Fact]
@@ -75,7 +91,7 @@ namespace Sum.Net.Tests
         {
             var sum = JsonConvert.DeserializeObject<SumType<int>>("true");
 
-            Assert.False(sum.Is<int>());
+            Assert.False(sum.Value is int);
         }
 
         [Fact]
@@ -83,9 +99,13 @@ namespace Sum.Net.Tests
         {
             var sum = JsonConvert.DeserializeObject<SumType<string, bool, ComplexClass, double>>("{\"StringProperty\":\"foo\",\"renamed\":42}");
 
-            Assert.True(sum.TryGet<ComplexClass>(out var complex));
-            Assert.Equal("foo", complex.StringProperty);
-            Assert.Equal(42, complex.RenamedProperty);
+            Assert.True(sum.Value is ComplexClass);
+
+            if (sum.Value is ComplexClass complex)
+            {
+                Assert.Equal("foo", complex.StringProperty);
+                Assert.Equal(42, complex.RenamedProperty);
+            }
         }
 
         [DataContract]

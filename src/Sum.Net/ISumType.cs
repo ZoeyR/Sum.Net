@@ -13,18 +13,8 @@ namespace Sum.Net
     public interface ISumType
     {
         /// <summary>
-        /// Checks if this sum type instance contains the specified type.
+        /// Gets the value stored in the SumType. This can be matched against using the "is" operator.
         /// </summary>
-        /// <typeparam name="T">The type to check for.</typeparam>
-        /// <returns>True if this sum type contains a <typeparamref name="T"/>, false otherwise.</returns>
-        bool Is<T>();
-
-        /// <summary>
-        /// Tries to retrieve a <typeparamref name="T"/> from this instance of ISumType.
-        /// </summary>
-        /// <typeparam name="T">The type to try and retrieve.</typeparam>
-        /// <param name="value">This is set to the underlying <typeparamref name="T"/> value if this instance contains a <typeparamref name="T"/>.</param>
-        /// <returns>True if this sum type contains a <typeparamref name="T"/>, false otherwise.</returns>
-        bool TryGet<T>(out T value);
+        object Value { get; }
     }
 }

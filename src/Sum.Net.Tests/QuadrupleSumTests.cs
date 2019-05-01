@@ -86,40 +86,40 @@ namespace Sum.Net.Tests
         public void IsTrueTest()
         {
             SumType<int, string, bool, double> sum = 1;
-            Assert.True(sum.Is<int>());
+            Assert.True(sum.Value is int);
 
             sum = "foo";
-            Assert.True(sum.Is<string>());
+            Assert.True(sum.Value is string);
 
             sum = true;
-            Assert.True(sum.Is<bool>());
+            Assert.True(sum.Value is bool);
 
             sum = 4.5;
-            Assert.True(sum.Is<double>());
+            Assert.True(sum.Value is double);
         }
 
         [Fact]
         public void IsFalseTest()
         {
             SumType<int, string, bool, double> sum = 1;
-            Assert.False(sum.Is<string>());
-            Assert.False(sum.Is<bool>());
-            Assert.False(sum.Is<double>());
+            Assert.False(sum.Value is string);
+            Assert.False(sum.Value is bool);
+            Assert.False(sum.Value is double);
 
             sum = "foo";
-            Assert.False(sum.Is<int>());
-            Assert.False(sum.Is<bool>());
-            Assert.False(sum.Is<double>());
+            Assert.False(sum.Value is int);
+            Assert.False(sum.Value is bool);
+            Assert.False(sum.Value is double);
 
             sum = true;
-            Assert.False(sum.Is<int>());
-            Assert.False(sum.Is<string>());
-            Assert.False(sum.Is<double>());
+            Assert.False(sum.Value is int);
+            Assert.False(sum.Value is string);
+            Assert.False(sum.Value is double);
 
             sum = 4.5;
-            Assert.False(sum.Is<int>());
-            Assert.False(sum.Is<string>());
-            Assert.False(sum.Is<bool>());
+            Assert.False(sum.Value is int);
+            Assert.False(sum.Value is string);
+            Assert.False(sum.Value is bool);
         }
     }
 }

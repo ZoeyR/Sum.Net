@@ -21,13 +21,15 @@ namespace Sum.Net
     public struct SumType<A> : ISumType
     {
         internal int Index;
-        internal object Value;
 
         internal SumType(int index, object value)
         {
             this.Index = index;
             this.Value = value;
         }
+
+        /// <inheritdoc/>
+        public object Value { get; }
 
         /// <summary>
         /// Implicitly wraps a value of type <typeparamref name="A"/> with a <see cref="SumType{A}"/>.
@@ -41,18 +43,6 @@ namespace Sum.Net
         /// <exception cref="InvalidCastException">Thrown if this instance of <see cref="SumType{A}"/> does not contain an instance of <typeparamref name="A"/>.</exception>
         /// <param name="sum">Instance to be unwrapped.</param>
         public static explicit operator A(SumType<A> sum) => sum.Index == 0 && sum.Value is A aVal ? aVal : throw new InvalidCastException();
-
-        /// <inheritdoc/>
-        public bool Is<T>()
-        {
-            return this.TryGet<T>(out var _);
-        }
-
-        /// <inheritdoc/>
-        public bool TryGet<T>(out T value)
-        {
-            return ((SumType<A, Empty>)this).TryGet<T>(out value);
-        }
     }
 
     /// <summary>
@@ -64,13 +54,15 @@ namespace Sum.Net
     public struct SumType<A, B> : ISumType
     {
         internal int Index;
-        internal object Value;
 
         internal SumType(int index, object value)
         {
             this.Index = index;
             this.Value = value;
         }
+
+        /// <inheritdoc/>
+        public object Value { get; }
 
         /// <summary>
         /// Implicitly wraps a value of type <typeparamref name="A"/> with a <see cref="SumType{A, B}"/>.
@@ -110,18 +102,6 @@ namespace Sum.Net
         /// <exception cref="InvalidCastException">Thrown if this instance of <see cref="SumType{A, B}"/> does not contain an instance of <typeparamref name="B"/>.</exception>
         /// <param name="sum">Instance to unwrap.</param>
         public static explicit operator B(SumType<A, B> sum) => sum.Index == 1 && sum.Value is B aVal ? aVal : throw new InvalidCastException();
-
-        /// <inheritdoc/>
-        public bool Is<T>()
-        {
-            return this.TryGet<T>(out var _);
-        }
-
-        /// <inheritdoc/>
-        public bool TryGet<T>(out T value)
-        {
-            return ((SumType<A, B, Empty>)this).TryGet(out value);
-        }
     }
 
     /// <summary>
@@ -134,13 +114,15 @@ namespace Sum.Net
     public struct SumType<A, B, C> : ISumType
     {
         internal int Index;
-        internal object Value;
 
         internal SumType(int index, object value)
         {
             this.Index = index;
             this.Value = value;
         }
+
+        /// <inheritdoc/>
+        public object Value { get; }
 
         /// <summary>
         /// Implicitly wraps a value of type <typeparamref name="A"/> with a <see cref="SumType{A, B, C}"/>.
@@ -206,18 +188,6 @@ namespace Sum.Net
         /// <exception cref="InvalidCastException">Thrown if this instance of <see cref="SumType{A, B, C}"/> does not contain an instance of <typeparamref name="B"/>.</exception>
         /// <param name="sum">Instance to unwrap.</param>
         public static explicit operator C(SumType<A, B, C> sum) => sum.Index == 2 && sum.Value is C aVal ? aVal : throw new InvalidCastException();
-
-        /// <inheritdoc/>
-        public bool Is<T>()
-        {
-            return this.TryGet<T>(out var _);
-        }
-
-        /// <inheritdoc/>
-        public bool TryGet<T>(out T value)
-        {
-            return ((SumType<A, B, C, Empty>)this).TryGet(out value);
-        }
     }
 
     /// <summary>
@@ -231,13 +201,15 @@ namespace Sum.Net
     public struct SumType<A, B, C, D> : ISumType
     {
         internal int Index;
-        internal object Value;
 
         internal SumType(int index, object value)
         {
             this.Index = index;
             this.Value = value;
         }
+
+        /// <inheritdoc/>
+        public object Value { get; }
 
         /// <summary>
         /// Implicitly wraps a value of type <typeparamref name="A"/> with a <see cref="SumType{A, B, C, D}"/>.
@@ -329,46 +301,5 @@ namespace Sum.Net
         /// <exception cref="InvalidCastException">Thrown if this instance of <see cref="SumType{A, B, C, D}"/> does not contain an instance of <typeparamref name="D"/>.</exception>
         /// <param name="sum">Instance to unwrap.</param>
         public static explicit operator D(SumType<A, B, C, D> sum) => sum.Index == 3 && sum.Value is D aVal ? aVal : throw new InvalidCastException();
-
-        /// <inheritdoc/>
-        public bool Is<T>()
-        {
-            return this.TryGet<T>(out var _);
-        }
-
-        /// <inheritdoc/>
-        public bool TryGet<T>(out T value)
-        {
-            if (this.Index == 0 && this.Value is A && this.Value is T tValA)
-            {
-                value = tValA;
-                return true;
-            }
-
-            if (this.Index == 1 && this.Value is B && this.Value is T tValB)
-            {
-                value = tValB;
-                return true;
-            }
-
-            if (this.Index == 2 && this.Value is C && this.Value is T tValC)
-            {
-                value = tValC;
-                return true;
-            }
-
-            if (this.Index == 3 && this.Value is D && this.Value is T tValD)
-            {
-                value = tValD;
-                return true;
-            }
-
-            value = default;
-            return false;
-        }
-    }
-
-    internal struct Empty
-    {
     }
 }
