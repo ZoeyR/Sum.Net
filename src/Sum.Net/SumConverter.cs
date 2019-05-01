@@ -57,8 +57,7 @@ namespace Sum.Net
         {
             writer = writer ?? throw new ArgumentNullException(nameof(writer));
 
-            var valueField = value.GetType().GetTypeInfo().GetDeclaredField("Value");
-            var sumValue = valueField.GetValue(value);
+            var sumValue = ((ISumType)value).Value;
             JToken token = JToken.FromObject(sumValue);
             token.WriteTo(writer);
         }

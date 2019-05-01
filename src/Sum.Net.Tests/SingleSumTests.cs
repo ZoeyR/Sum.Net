@@ -32,14 +32,14 @@ namespace Sum.Net.Tests
         public void SumIsTrueTest()
         {
             SumType<int> sum = 1;
-            Assert.True(sum.Is<int>());
+            Assert.True(sum.Value is int);
         }
 
         [Fact]
         public void SumIsFalseTest()
         {
             SumType<int> sum = 1;
-            Assert.False(sum.Is<string>());
+            Assert.False(sum.Value is string);
         }
 
         [Fact]
@@ -47,35 +47,7 @@ namespace Sum.Net.Tests
         {
             SumType<int, string> sum = "foo";
             SumType<int> lowerSum = sum;
-            Assert.False(lowerSum.Is<string>());
-        }
-
-        [Fact]
-        public void SumTryGetSucceedsTest()
-        {
-            SumType<int> sum = 1;
-
-            Assert.True(sum.TryGet<int>(out var value));
-            Assert.Equal(1, value);
-        }
-
-        [Fact]
-        public void SumTryGetFailsTest()
-        {
-            SumType<int> sum = 1;
-
-            Assert.False(sum.TryGet<string>(out var value));
-            Assert.Equal(default, value);
-        }
-
-        [Fact]
-        public void SumTryGetFailsDowncastTest()
-        {
-            SumType<int, string> upperSum = "foo";
-            SumType<int> sum = upperSum;
-
-            Assert.False(sum.TryGet<string>(out var value));
-            Assert.Equal(default, value);
+            Assert.True(lowerSum.Value is string);
         }
     }
 }

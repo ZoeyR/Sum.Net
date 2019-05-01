@@ -54,20 +54,20 @@ namespace Sum.Net.Tests
         public void SumIsTrueTest()
         {
             SumType<int, string> sum = "foo";
-            Assert.True(sum.Is<string>());
+            Assert.True(sum.Value is string);
 
             sum = 1;
-            Assert.True(sum.Is<int>());
+            Assert.True(sum.Value is int);
         }
 
         [Fact]
         public void SumIsFalseTest()
         {
             SumType<int, string> sum = 1;
-            Assert.False(sum.Is<string>());
+            Assert.False(sum.Value is string);
 
             sum = "foo";
-            Assert.False(sum.Is<int>());
+            Assert.False(sum.Value is int);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace Sum.Net.Tests
             SumType<int, string> sum = "foo";
             SumType<int> lowerSum = sum;
             SumType<int, string> upperSum = lowerSum;
-            Assert.True(upperSum.Is<string>());
+            Assert.True(upperSum.Value is string);
         }
 
         [Fact]
@@ -85,55 +85,8 @@ namespace Sum.Net.Tests
             SumType<int, string> sum = "foo";
             SumType<int> lowerSum = sum;
             SumType<int, bool> upperSum = lowerSum;
-            Assert.False(upperSum.Is<string>());
-            Assert.False(upperSum.Is<bool>());
-        }
-
-        [Fact]
-        public void SumTryGetSucceedsTest()
-        {
-            SumType<int, string> sum = "foo";
-            Assert.True(sum.TryGet<string>(out var stringValue));
-            Assert.Equal("foo", stringValue);
-
-            sum = 1;
-            Assert.True(sum.TryGet<int>(out var intValue));
-            Assert.Equal(1, intValue);
-        }
-
-        [Fact]
-        public void SumTryGetFailsTest()
-        {
-            SumType<int, string> sum = 1;
-            Assert.False(sum.TryGet<string>(out var stringValue));
-            Assert.Equal(default, stringValue);
-
-            sum = "foo";
-            Assert.False(sum.TryGet<int>(out var intValue));
-            Assert.Equal(default, intValue);
-        }
-
-        [Fact]
-        public void SumTryGetDowncastUpcastSucceedsTest()
-        {
-            SumType<int, string> sum = "foo";
-            SumType<int> lowerSum = sum;
-            SumType<int, string> upperSum = lowerSum;
-            Assert.True(upperSum.TryGet<string>(out var stringValue));
-            Assert.Equal("foo", stringValue);
-        }
-
-        [Fact]
-        public void SumTryGetDowncastUpcastFailsTest()
-        {
-            SumType<int, string> sum = "foo";
-            SumType<int> lowerSum = sum;
-            SumType<int, bool> upperSum = lowerSum;
-            Assert.False(upperSum.TryGet<string>(out var stringValue));
-            Assert.Equal(default, stringValue);
-
-            Assert.False(upperSum.TryGet<bool>(out var boolValue));
-            Assert.Equal(default, stringValue);
+            Assert.True(upperSum.Value is string);
+            Assert.False(upperSum.Value is bool);
         }
     }
 }
